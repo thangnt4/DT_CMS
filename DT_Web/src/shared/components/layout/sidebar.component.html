@@ -21,7 +21,11 @@
         </a>
       </li>
 
-      <li *ngIf="item.type === 'group'">
+      <li
+        *ngIf="item.type === 'group'"
+        (mouseenter)="onGroupMouseEnter(item.key, $event)"
+        (mouseleave)="onGroupMouseLeave()"
+      >
         <div
           class="flex items-center justify-between p-2 cursor-pointer select-none rounded-xl hover:bg-emphasis transition-colors"
           pRipple
@@ -50,6 +54,34 @@
                 [class.bg-primary]="rlaChild.isActive"
                 [class.text-white]="rlaChild.isActive"
                 [class.text-muted-color]="!rlaChild.isActive"
+              >
+                <i [class]="child.icon + ' text-sm'"></i>
+              </span>
+              <span>{{ child.label }}</span>
+            </a>
+          </li>
+        </ul>
+
+        <ul
+          *ngIf="isFlyoutOpen(item.key)"
+          class="list-none m-0 p-2 flex flex-col gap-1 fixed bg-surface-0 border border-surface-200 rounded-xl shadow-lg z-50 min-w-[12rem]"
+          [style.top.px]="flyoutTop"
+          [style.left.px]="flyoutLeft"
+        >
+          <li class="px-2 py-1 text-sm font-semibold text-muted-color whitespace-nowrap">{{ item.label }}</li>
+          <li *ngFor="let child of item.children">
+            <a
+              [routerLink]="child.route"
+              routerLinkActive="bg-primary-50 text-primary font-semibold"
+              #rlaFlyout="routerLinkActive"
+              class="flex items-center gap-2 p-2 rounded-xl no-underline text-color hover:bg-emphasis transition-colors whitespace-nowrap"
+              pRipple
+            >
+              <span
+                class="flex items-center justify-center w-7 h-7 rounded-lg shrink-0 transition-colors"
+                [class.bg-primary]="rlaFlyout.isActive"
+                [class.text-white]="rlaFlyout.isActive"
+                [class.text-muted-color]="!rlaFlyout.isActive"
               >
                 <i [class]="child.icon + ' text-sm'"></i>
               </span>

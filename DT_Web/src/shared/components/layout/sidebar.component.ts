@@ -49,6 +49,10 @@ export class SidebarComponent implements OnInit {
 
   openGroups = new Set<string>(['system']);
 
+  hoveredGroup: string | null = null;
+  flyoutTop = 0;
+  flyoutLeft = 0;
+
   constructor(private routerRef: Router) {}
 
   ngOnInit(): void {
@@ -66,6 +70,22 @@ export class SidebarComponent implements OnInit {
 
   isGroupOpen(key: string): boolean {
     return this.openGroups.has(key);
+  }
+
+  onGroupMouseEnter(key: string, event: MouseEvent): void {
+    if (!this.collapsed) return;
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    this.flyoutTop = rect.top;
+    this.flyoutLeft = rect.right + 8;
+    this.hoveredGroup = key;
+  }
+
+  onGroupMouseLeave(): void {
+    this.hoveredGroup = null;
+  }
+
+  isFlyoutOpen(key: string): boolean {
+    return this.collapsed && this.hoveredGroup === key;
   }
 
   private autoOpenActiveGroup(): void {
