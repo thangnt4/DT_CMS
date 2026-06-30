@@ -1,7 +1,6 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subject, debounceTime } from 'rxjs';
 
 import { TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -36,7 +35,7 @@ import { User } from '../../../core/models/user.model';
   ],
   templateUrl: './users.component.html'
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
   private readonly userService = inject(UserService);
   private readonly fb = inject(FormBuilder);
   private readonly messageService = inject(MessageService);
@@ -54,7 +53,6 @@ export class UsersComponent implements OnInit {
   pageSize = 10;
 
   private editingId: number | null = null;
-  private readonly searchSubject = new Subject<string>();
 
   readonly form = this.fb.nonNullable.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
@@ -64,18 +62,12 @@ export class UsersComponent implements OnInit {
     isActive: [true]
   });
 
-  ngOnInit(): void {
-    // p-table with [lazy]="true" fires onLazyLoad once on first render,
-    // which triggers the initial load() — no explicit call needed here.
-    this.searchSubject.pipe(debounceTime(400)).subscribe(() => {
-      this.page = 1;
-      this.load();
-    });
-  }
+  // p-table with [lazy]="true" fires onLazyLoad once on first render,
+  // which triggers the initial load() — no explicit call needed here.
 
-  onSearchChange(value: string): void {
-    this.keyword = value;
-    this.searchSubject.next(value);
+  search(): void {
+    this.page = 1;
+    this.load();
   }
 
   load(): void {

@@ -53,6 +53,10 @@ export class SidebarComponent implements OnInit {
   flyoutTop = 0;
   flyoutLeft = 0;
 
+  hoveredDirect: string | null = null;
+  tooltipTop = 0;
+  tooltipLeft = 0;
+
   constructor(private routerRef: Router) {}
 
   ngOnInit(): void {
@@ -72,8 +76,13 @@ export class SidebarComponent implements OnInit {
     return this.openGroups.has(key);
   }
 
+  isGroupActive(item: GroupItem): boolean {
+    return item.children.some((c) =>
+      this.routerRef.isActive(c.route, { paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' })
+    );
+  }
+
   onGroupMouseEnter(key: string, event: MouseEvent): void {
-    if (!this.collapsed) return;
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
     this.flyoutTop = rect.top;
     this.flyoutLeft = rect.right + 8;
@@ -85,12 +94,29 @@ export class SidebarComponent implements OnInit {
   }
 
   isFlyoutOpen(key: string): boolean {
-    return this.collapsed && this.hoveredGroup === key;
+    if (this.hoveredGroup !== key) return false;
+    return this.collapsed || !this.isGroupOpen(key);
+  }
+
+  onDirectMouseEnter(key: string, event: MouseEvent): void {
+    if (!this.collapsed) return;
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    this.tooltipTop = rect.top;
+    this.tooltipLeft = rect.right + 8;
+    this.hoveredDirect = key;
+  }
+
+  onDirectMouseLeave(): void {
+    this.hoveredDirect = null;
+  }
+
+  isTooltipOpen(key: string): boolean {
+    return this.collapsed && this.hoveredDirect === key;
   }
 
   private autoOpenActiveGroup(): void {
     for (const item of this.menu) {
-      if (item.type === 'group' && item.children.some((c) => this.routerRef.isActive(c.route, { paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' }))) {
+      if (item.type === 'group' && this.isGroupActive(item)) {
         this.openGroups.add(item.key);
       }
     }
