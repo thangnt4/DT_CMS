@@ -1,0 +1,44 @@
+<p-drawer
+  [visible]="themeService.panelVisible()"
+  (visibleChange)="themeService.panelVisible.set($event)"
+  position="right"
+  header="Tùy chỉnh giao diện"
+  styleClass="w-full sm:w-96"
+>
+  <div class="flex flex-col gap-6">
+    <div class="flex items-center justify-between">
+      <span class="font-semibold">Chế độ tối</span>
+      <p-toggleswitch [ngModel]="themeService.darkMode()" (ngModelChange)="themeService.toggleDarkMode()"></p-toggleswitch>
+    </div>
+
+    <div>
+      <div class="font-semibold mb-3">Màu chủ đạo (Primary)</div>
+      <div class="flex flex-wrap gap-3">
+        <button
+          *ngFor="let color of primaryColors"
+          type="button"
+          class="w-8 h-8 rounded-full border-2 transition-transform hover:scale-110"
+          [style.background-color]="color.swatch"
+          [style.border-color]="themeService.primaryColor() === color.name ? 'var(--p-primary-color)' : 'transparent'"
+          [title]="color.name"
+          (click)="themeService.setPrimaryColor(color.name)"
+        ></button>
+      </div>
+    </div>
+
+    <div>
+      <div class="font-semibold mb-3">Màu nền (Surface)</div>
+      <div class="flex flex-wrap gap-3">
+        <button
+          *ngFor="let color of surfaceColors"
+          type="button"
+          class="w-8 h-8 rounded-full border-2 transition-transform hover:scale-110"
+          [style.background-color]="color.swatch"
+          [style.border-color]="themeService.surfaceColor() === color.name ? 'var(--p-primary-color)' : 'transparent'"
+          [title]="color.name"
+          (click)="themeService.setSurfaceColor(color.name)"
+        ></button>
+      </div>
+    </div>
+  </div>
+</p-drawer>

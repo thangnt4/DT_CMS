@@ -1,0 +1,42 @@
+<div class="min-h-screen flex items-center justify-center bg-surface-50 px-4">
+  <div class="w-full max-w-md bg-surface-0 shadow-lg rounded-2xl p-8">
+    <div class="text-center mb-6">
+      <i class="pi pi-shield text-4xl text-primary"></i>
+      <h1 class="text-2xl font-bold mt-2">DT CMS</h1>
+      <p class="text-muted-color">Đăng nhập để tiếp tục</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="username">Tài khoản</label>
+        <input id="username" type="text" pInputText formControlName="username" placeholder="admin" autocomplete="username" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="password">Mật khẩu</label>
+        <p-password
+          inputId="password"
+          formControlName="password"
+          [feedback]="false"
+          [toggleMask]="true"
+          autocomplete="current-password"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        ></p-password>
+      </div>
+
+      <p-message *ngIf="errorMessage()" severity="error" [text]="errorMessage()!"></p-message>
+
+      <button
+        pButton
+        type="submit"
+        label="Đăng nhập"
+        icon="pi pi-sign-in"
+        class="w-full mt-2"
+        [loading]="loading()"
+      ></button>
+
+      <p class="text-sm text-muted-color text-center mt-2">Tài khoản mặc định: admin / Admin@123</p>
+    </form>
+  </div>
+</div>

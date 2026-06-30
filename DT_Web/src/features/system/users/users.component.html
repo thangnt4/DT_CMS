@@ -1,0 +1,140 @@
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold m-0">Người dùng</h1>
+  <button pButton type="button" icon="pi pi-plus" label="Thêm mới" (click)="openCreateDialog()"></button>
+</div>
+
+<div class="bg-surface-0 rounded-xl shadow-sm p-4">
+  <div class="flex justify-between mb-4">
+    <p-iconfield iconPosition="left">
+      <p-inputicon class="pi pi-search" />
+      <input
+        type="text"
+        pInputText
+        placeholder="Tìm theo username / họ tên..."
+        [ngModel]="keyword"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </p-iconfield>
+  </div>
+
+  <p-table
+    [value]="users()"
+    [lazy]="true"
+    (onLazyLoad)="onPage($event)"
+    [paginator]="true"
+    [rows]="pageSize"
+    [totalRecords]="totalRecords()"
+    [loading]="loading()"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    dataKey="id"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem">#</th>
+        <th>Username</th>
+        <th>Họ tên</th>
+        <th>Email</th>
+        <th style="width: 8rem">Trạng thái</th>
+        <th style="width: 10rem">Ngày tạo</th>
+        <th style="width: 8rem">Hành động</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
+      <tr>
+        <td>{{ rowIndex + 1 }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.fullName }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <p-tag [severity]="user.isActive ? 'success' : 'danger'" [value]="user.isActive ? 'Active' : 'Inactive'"></p-tag>
+        </td>
+        <td>{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <div class="flex gap-2">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              class="p-button-text p-button-rounded"
+              (click)="openEditDialog(user)"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-text p-button-rounded p-button-danger"
+              (click)="confirmDelete(user)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="text-center py-6 text-muted-color">Không có dữ liệu.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  [style]="{ width: '32rem' }"
+  [header]="isEditMode() ? 'Cập nhật người dùng' : 'Thêm người dùng'"
+>
+  <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4 pt-2">
+    <div class="flex flex-col gap-2">
+      <label for="username">Username</label>
+      <input id="username" type="text" pInputText formControlName="username" placeholder="username" />
+      @if (form.controls.username.invalid && form.controls.username.touched) {
+        <small class="text-red-500">Username tối thiểu 3 ký tự.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="password">{{ isEditMode() ? 'Mật khẩu mới (để trống nếu không đổi)' : 'Mật khẩu' }}</label>
+      <p-password
+        inputId="password"
+        formControlName="password"
+        [feedback]="false"
+        [toggleMask]="true"
+        styleClass="w-full"
+        inputStyleClass="w-full"
+      ></p-password>
+      @if (form.controls.password.invalid && form.controls.password.touched) {
+        <small class="text-red-500">Mật khẩu tối thiểu 6 ký tự.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="fullName">Họ tên</label>
+      <input id="fullName" type="text" pInputText formControlName="fullName" placeholder="Nguyễn Văn A" />
+      @if (form.controls.fullName.invalid && form.controls.fullName.touched) {
+        <small class="text-red-500">Họ tên là bắt buộc.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="email">Email</label>
+      <input id="email" type="email" pInputText formControlName="email" placeholder="email@example.com" />
+      @if (form.controls.email.invalid && form.controls.email.touched) {
+        <small class="text-red-500">Email không hợp lệ.</small>
+      }
+    </div>
+
+    <div class="flex items-center gap-2">
+      <p-toggleswitch formControlName="isActive" inputId="isActive"></p-toggleswitch>
+      <label for="isActive">Kích hoạt tài khoản</label>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Hủy" class="p-button-text" (click)="closeDialog()"></button>
+    <button pButton type="button" label="Lưu" icon="pi pi-check" [loading]="saving()" (click)="save()"></button>
+  </ng-template>
+</p-dialog>

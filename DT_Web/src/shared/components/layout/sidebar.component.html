@@ -1,0 +1,63 @@
+<nav class="h-full overflow-y-auto py-3" [class.px-1]="collapsed" [class.px-3]="!collapsed">
+  <ul class="list-none p-0 m-0 flex flex-col gap-1">
+    <ng-container *ngFor="let item of menu">
+      <li *ngIf="item.type === 'direct'">
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="bg-primary-50 text-primary font-semibold"
+          #rla="routerLinkActive"
+          class="flex items-center gap-2 p-2 rounded-xl no-underline text-color hover:bg-emphasis transition-colors"
+          pRipple
+        >
+          <span
+            class="flex items-center justify-center w-8 h-8 rounded-lg shrink-0 transition-colors"
+            [class.bg-primary]="rla.isActive"
+            [class.text-white]="rla.isActive"
+            [class.text-muted-color]="!rla.isActive"
+          >
+            <i [class]="item.icon"></i>
+          </span>
+          <span *ngIf="!collapsed">{{ item.label }}</span>
+        </a>
+      </li>
+
+      <li *ngIf="item.type === 'group'">
+        <div
+          class="flex items-center justify-between p-2 cursor-pointer select-none rounded-xl hover:bg-emphasis transition-colors"
+          pRipple
+          (click)="toggleGroup(item.key)"
+        >
+          <span class="flex items-center gap-2">
+            <span class="flex items-center justify-center w-8 h-8 rounded-lg shrink-0 text-muted-color">
+              <i [class]="item.icon"></i>
+            </span>
+            <span *ngIf="!collapsed" class="font-medium">{{ item.label }}</span>
+          </span>
+          <i *ngIf="!collapsed" class="pi pi-angle-down text-muted-color transition-transform" [class.rotate-180]="isGroupOpen(item.key)"></i>
+        </div>
+
+        <ul *ngIf="isGroupOpen(item.key) && !collapsed" class="list-none pl-10 m-0 mt-1 flex flex-col gap-1">
+          <li *ngFor="let child of item.children">
+            <a
+              [routerLink]="child.route"
+              routerLinkActive="bg-primary-50 text-primary font-semibold"
+              #rlaChild="routerLinkActive"
+              class="flex items-center gap-2 p-2 rounded-xl no-underline text-color hover:bg-emphasis transition-colors"
+              pRipple
+            >
+              <span
+                class="flex items-center justify-center w-7 h-7 rounded-lg shrink-0 transition-colors"
+                [class.bg-primary]="rlaChild.isActive"
+                [class.text-white]="rlaChild.isActive"
+                [class.text-muted-color]="!rlaChild.isActive"
+              >
+                <i [class]="child.icon + ' text-sm'"></i>
+              </span>
+              <span>{{ child.label }}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ng-container>
+  </ul>
+</nav>

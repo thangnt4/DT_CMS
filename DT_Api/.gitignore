@@ -1,0 +1,24 @@
+.vs/
+PCCC_API/.vs/
+PCCC_API/.vs/PCCCAPI/v16/.suo
+.vs/**
+PCCC_API/.vs/**
+**/.vs/**
+**/obj/**
+**/bin/**
+**/node_modules/**
+**/wwwroot/**
+ 
+wwwroot.rar
+ 
+*.pubxml
+*.pubxml.user
+*.user
+
+*.lock
+*.user
+*.suo
+
+PCCC_API/web.config
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
