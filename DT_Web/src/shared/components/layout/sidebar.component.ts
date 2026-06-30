@@ -40,6 +40,13 @@ export class SidebarComponent implements OnInit {
     { type: 'direct', key: 'dashboard', label: 'Dashboard', icon: 'pi pi-home', route: '/dashboard' },
     {
       type: 'group',
+      key: 'category',
+      label: 'Danh mục',
+      icon: 'pi pi-folder',
+      children: [{ label: 'Chức vụ', icon: 'pi pi-briefcase', route: '/danh-muc/chuc-vu' }]
+    },
+    {
+      type: 'group',
       key: 'system',
       label: 'Hệ thống',
       icon: 'pi pi-cog',

@@ -20,6 +20,10 @@ export const routes: Routes = [
       {
         path: 'system',
         loadChildren: () => import('../features/system/system.routes').then((m) => m.systemRoutes)
+      },
+      {
+        path: 'danh-muc',
+        loadChildren: () => import('../features/danh-muc/danh-muc.routes').then((m) => m.danhMucRoutes)
       }
     ]
   },

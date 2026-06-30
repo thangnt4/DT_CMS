@@ -27,6 +27,7 @@ builder.Services.AddSingleton<DapperHelper>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IChucVuService, ChucVuService>();
 
 // JWT Authentication
 builder.Services.AddAuthentication(options =>
