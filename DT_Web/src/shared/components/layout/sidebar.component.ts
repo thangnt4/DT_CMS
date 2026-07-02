@@ -43,7 +43,8 @@ export class SidebarComponent implements OnInit {
       key: 'category',
       label: 'Danh mục',
       icon: 'pi pi-folder',
-      children: [{ label: 'Chức vụ', icon: 'pi pi-briefcase', route: '/danh-muc/chuc-vu' }]
+      children: [{ label: 'Chức vụ', icon: 'pi pi-briefcase', route: '/danh-muc/chuc-vu' },
+      { label: 'Tin tức', icon: 'pi pi-book', route: '/danh-muc/tin-tuc' }]
     },
     {
       type: 'group',

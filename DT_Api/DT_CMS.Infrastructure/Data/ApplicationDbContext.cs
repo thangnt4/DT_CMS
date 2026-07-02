@@ -10,6 +10,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<ChucVu> ChucVus => Set<ChucVu>();
     public DbSet<LoaiTinTuc> LoaiTinTucs => Set<LoaiTinTuc>();
+    public DbSet<TinTuc> TinTucs => Set<TinTuc>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
