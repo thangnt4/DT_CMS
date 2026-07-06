@@ -1,11 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <Compile Remove="Controllers\SanPhamController.cs" />
-    <Compile Remove="Services\SanPhamService.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DT_CMS.Core\DT_CMS.Core.csproj" />
     <ProjectReference Include="..\DT_CMS.Infrastructure\DT_CMS.Infrastructure.csproj" />
   </ItemGroup>

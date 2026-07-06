@@ -48,7 +48,7 @@ public class SanPhamService : ISanPhamService
     public async Task<SanPhamDto> CreateSanPhamAsync(CreateSanPhamDto dto, int currentUserId)
     {
         if (await _db.SanPhams.AsNoTracking().AnyAsync(c => c.TenDuLieu == dto.TenDuLieu))
-            throw new AppException($"Chức vụ '{dto.TenDuLieu}' đã tồn tại.");
+            throw new AppException($"Sản Phẩm '{dto.TenDuLieu}' đã tồn tại.");
 
         var SanPham = new SanPham
         {
@@ -71,7 +71,7 @@ public class SanPhamService : ISanPhamService
             ?? throw new NotFoundException("SanPham", id);
 
         if (await _db.SanPhams.AsNoTracking().AnyAsync(c => c.Id != id && c.TenDuLieu == dto.TenDuLieu))
-            throw new AppException($"Chức vụ '{dto.TenDuLieu}' đã tồn tại.");
+            throw new AppException($"Sản Phẩm '{dto.TenDuLieu}' đã tồn tại.");
 
         SanPham.TenDuLieu = dto.TenDuLieu;
         SanPham.GhiChu = dto.GhiChu;

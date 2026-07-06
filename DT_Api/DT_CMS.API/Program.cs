@@ -29,6 +29,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IChucVuService, ChucVuService>();
 builder.Services.AddScoped<ISanPhamService, SanPhamService>();
+builder.Services.AddScoped<ILoaiTinTucService, LoaiTinTucService>();
+builder.Services.AddScoped<ITinTucService, TinTucService>();
 
 // JWT Authentication
 builder.Services.AddAuthentication(options =>
@@ -70,11 +72,12 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "DT_CMS API", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header. Enter: Bearer {your token}",
+        Description = "Nhập token JWT (không cần gõ chữ \"Bearer\", Swagger sẽ tự thêm).",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT"
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {

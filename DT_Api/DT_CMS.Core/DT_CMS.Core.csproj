@@ -6,15 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="DTOs\SanPhams\**" />
-    <EmbeddedResource Remove="DTOs\SanPhams\**" />
-    <None Remove="DTOs\SanPhams\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Entities\SanPham.cs" />
-    <Compile Remove="Interfaces\Services\ISanPhamService.cs" />
-  </ItemGroup>
-
 </Project>

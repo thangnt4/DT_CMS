@@ -6,7 +6,12 @@ export const danhMucRoutes: Routes = [
     loadComponent: () => import('./chuc-vu/chuc-vu.component').then((m) => m.ChucVuComponent)
   },
   {
-    path: 'danh-muc-san-pham',
+    path: 'san-pham',
     loadComponent: () => import('./san-pham/san-pham.component').then((m) => m.SanPhamComponent)
+  },
+  {
+    path: 'tin-tuc',
+    loadComponent: () => import('./tin-tuc/tin-tuc.component').then((m) => m.TinTucComponent)
   }
 ];
+
