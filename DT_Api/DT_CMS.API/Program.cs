@@ -28,6 +28,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IChucVuService, ChucVuService>();
+builder.Services.AddScoped<ISanPhamService, SanPhamService>();
 
 // JWT Authentication
 builder.Services.AddAuthentication(options =>
