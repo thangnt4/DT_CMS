@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApiResponse, PagedResult, QueryParams } from '../models/api-response.model';
-import { SanPham, CreateSanPham, UpdateSanPham } from '../models/san-pham.model';
+import { SanPham } from '../models/san-pham.model';
 
 @Injectable({ providedIn: 'root' })
 export class SanPhamService {
@@ -22,11 +22,11 @@ export class SanPhamService {
     return this.http.get<ApiResponse<SanPham>>(`${this.apiUrl}/${id}`);
   }
 
-  createSanPham(SanPham: CreateSanPham): Observable<ApiResponse<SanPham>> {
+  createSanPham(SanPham: FormData): Observable<ApiResponse<SanPham>> {
     return this.http.post<ApiResponse<SanPham>>(this.apiUrl, SanPham);
   }
 
-  updateSanPham(id: number, SanPham: UpdateSanPham): Observable<ApiResponse<SanPham>> {
+  updateSanPham(id: number, SanPham: FormData): Observable<ApiResponse<SanPham>> {
     return this.http.put<ApiResponse<SanPham>>(`${this.apiUrl}/${id}`, SanPham);
   }
 

@@ -12,6 +12,7 @@ public class SanPhamConfiguration : IEntityTypeConfiguration<SanPham>
         builder.HasKey(c => c.Id);
         builder.Property(c => c.TenDuLieu).HasMaxLength(500).IsRequired();
         builder.Property(c => c.GhiChu);
+        builder.Property(c => c.FileDinhKem).HasMaxLength(500);
         builder.Property(c => c.TrangThai).HasDefaultValue(1);
         builder.Property(c => c.NgayTao).HasDefaultValueSql("SYSUTCDATETIME()");
         builder.Property(c => c.NgayCapNhat).HasColumnType("date");

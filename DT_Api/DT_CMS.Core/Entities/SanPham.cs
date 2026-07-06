@@ -5,6 +5,7 @@ public class SanPham
     public int Id { get; set; }
     public string TenDuLieu { get; set; } = string.Empty;
     public string? GhiChu { get; set; }
+    public string? FileDinhKem { get; set; }
     public int? TrangThai { get; set; } = 1;
     public int? NguoiTao { get; set; }
     public DateTime NgayTao { get; set; } = DateTime.Now;

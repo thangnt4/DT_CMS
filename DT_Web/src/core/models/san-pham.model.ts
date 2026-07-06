@@ -3,6 +3,7 @@ export interface SanPham {
   tenDuLieu: string;
   ghiChu?: string | null;
   trangThai: number;
+  fileDinhKem?: string | null;
   ngayTao: string;
   ngayCapNhat?: string | null;
 }

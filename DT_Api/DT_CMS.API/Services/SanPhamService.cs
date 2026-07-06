@@ -4,6 +4,8 @@ using DT_CMS.Core.Entities;
 using DT_CMS.Core.Exceptions;
 using DT_CMS.Core.Interfaces.Services;
 using DT_CMS.Infrastructure.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace DT_CMS.API.Services;
@@ -11,8 +13,29 @@ namespace DT_CMS.API.Services;
 public class SanPhamService : ISanPhamService
 {
     private readonly ApplicationDbContext _db;
+    private readonly IWebHostEnvironment _env;
 
-    public SanPhamService(ApplicationDbContext db) => _db = db;
+    public SanPhamService(ApplicationDbContext db, IWebHostEnvironment env)
+    {
+        _db = db;
+        _env = env;
+    }
+
+    private async Task<string> SaveFileDinhKemAsync(IFormFile file)
+    {
+        var uploadFolder = Path.Combine(_env.ContentRootPath, "wwwroot", "uploads", "sanpham");
+        Directory.CreateDirectory(uploadFolder);
+
+        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        var filePath = Path.Combine(uploadFolder, fileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        return $"uploads/sanpham/{fileName}";
+    }
 
     public async Task<PagedResultDto<SanPhamDto>> GetSanPhamsAsync(QueryParamsDto query)
     {
@@ -59,6 +82,9 @@ public class SanPhamService : ISanPhamService
             NgayTao = DateTime.Now
         };
 
+        if (dto.File != null)
+            SanPham.FileDinhKem = await SaveFileDinhKemAsync(dto.File);
+
         _db.SanPhams.Add(SanPham);
         await _db.SaveChangesAsync();
 
@@ -78,6 +104,9 @@ public class SanPhamService : ISanPhamService
         SanPham.TrangThai = dto.TrangThai;
         SanPham.NguoiCapNhat = currentUserId;
         SanPham.NgayCapNhat = DateTime.UtcNow;
+
+        if (dto.File != null)
+            SanPham.FileDinhKem = await SaveFileDinhKemAsync(dto.File);
 
         await _db.SaveChangesAsync();
 
@@ -99,6 +128,7 @@ public class SanPhamService : ISanPhamService
         TenDuLieu = SanPham.TenDuLieu,
         GhiChu = SanPham.GhiChu,
         TrangThai = SanPham.TrangThai,
+        FileDinhKem = SanPham.FileDinhKem,
         NgayTao = SanPham.NgayTao,
         NgayCapNhat = SanPham.NgayCapNhat
     };
