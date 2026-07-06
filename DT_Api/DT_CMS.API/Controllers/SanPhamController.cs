@@ -36,7 +36,8 @@ public class SanPhamController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateSanPhamDto dto)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Create([FromForm] CreateSanPhamDto dto)
     {
         var result = await _sanPhamService.CreateSanPhamAsync(dto, CurrentUserId);
 
@@ -47,7 +48,8 @@ public class SanPhamController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateSanPhamDto dto)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Update(int id, [FromForm] UpdateSanPhamDto dto)
     {
         var result = await _sanPhamService.UpdateSanPhamAsync(id, dto, CurrentUserId);
 

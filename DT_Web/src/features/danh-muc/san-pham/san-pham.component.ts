@@ -15,6 +15,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { SanPhamService } from '../../../core/services/san-pham.service';
 import { SanPham } from '../../../core/models/san-pham.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-san-pham',
@@ -47,6 +48,9 @@ export class SanPhamComponent {
   readonly dialogVisible = signal(false);
   readonly isEditMode = signal(false);
   readonly saving = signal(false);
+  readonly selectedFile = signal<File | null>(null);
+  readonly currentFileDinhKem = signal<string | null>(null);
+  readonly fileBaseUrl = environment.apiUrl.replace(/\/api$/, '');
 
   keyword = '';
   page = 1;
@@ -95,6 +99,8 @@ export class SanPhamComponent {
   openCreateDialog(): void {
     this.isEditMode.set(false);
     this.editingId = null;
+    this.selectedFile.set(null);
+    this.currentFileDinhKem.set(null);
     this.form.reset({ tenDuLieu: '', ghiChu: '', trangThai: true });
     this.dialogVisible.set(true);
   }
@@ -102,12 +108,19 @@ export class SanPhamComponent {
   openEditDialog(item: SanPham): void {
     this.isEditMode.set(true);
     this.editingId = item.id;
+    this.selectedFile.set(null);
+    this.currentFileDinhKem.set(item.fileDinhKem ?? null);
     this.form.reset({
       tenDuLieu: item.tenDuLieu,
       ghiChu: item.ghiChu ?? '',
       trangThai: item.trangThai === 1
     });
     this.dialogVisible.set(true);
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedFile.set(input.files?.length ? input.files[0] : null);
   }
 
   closeDialog(): void {
@@ -122,15 +135,17 @@ export class SanPhamComponent {
 
     this.saving.set(true);
     const raw = this.form.getRawValue();
-    const payload = {
-      tenDuLieu: raw.tenDuLieu,
-      ghiChu: raw.ghiChu || null,
-      trangThai: raw.trangThai ? 1 : 0
-    };
+    const formData = new FormData();
+    formData.append('tenDuLieu', raw.tenDuLieu);
+    if (raw.ghiChu) formData.append('ghiChu', raw.ghiChu);
+    formData.append('trangThai', raw.trangThai ? '1' : '0');
+    if (this.selectedFile()) {
+      formData.append('file', this.selectedFile()!);
+    }
 
     const request$ = this.isEditMode()
-      ? this.sanPhamService.updateSanPham(this.editingId!, payload)
-      : this.sanPhamService.createSanPham(payload);
+      ? this.sanPhamService.updateSanPham(this.editingId!, formData)
+      : this.sanPhamService.createSanPham(formData);
 
     request$.subscribe({
       next: () => {
